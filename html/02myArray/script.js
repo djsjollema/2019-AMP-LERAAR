@@ -8,25 +8,39 @@ canvas.width = width;
 canvas.height = height;
 
 let points = [];
-let maxpoints = 20;
+let maxpoints = 5;
 let counter = 0;
+let hit = 0;
 
-for(let i=0; i<20; i++){
-  let color = "rgba(" + getRandom(255) + "," + getRandom(255) + "," + getRandom(255) + "," + 0.3 + ")"
-  let A = new Point(new Vector2d(getRandom(width),getRandom(height)),10,color,"hallos");
-  A.label = counter;
-  counter++;
-  points.push(A);
 
+for(let i=0; i<maxpoints; i++){
+  addPoint("rgba(255,0,0,0.2)");
 }
 
 let mouse = new Vector2d();
-let differenceVector = new Vector2d();
+let difference = new Vector2d();
 
 window.addEventListener('click',(e)=>{
   mouse.dx = e.clientX;
   mouse.dy = e.clientY;
-  console.log(mouse);
+
+  for (var i = 0; i < points.length; i++) {
+    difference.differenceVector(points[i].position,mouse);
+     if(difference.magnitude<points[i].radius){
+       points[i].color = "rgba(0,0,255,0.2)";
+       hit++
+     };
+   }
+   console.log(hit);
+  if(hit>= maxpoints){
+    hit = 0;
+    counter = 0;
+    points.splice(0,maxpoints)
+    for (var i = 0; i<maxpoints; i++) {
+      addPoint("rgba(255,0,0,0.2)");
+    }
+  }
+
 })
 
 function animate() {
@@ -35,11 +49,7 @@ function animate() {
 
 
   for(let i = 0; i<points.length; i++){
-    points[i].radius+= 0.4;
     points[i].draw(context);
-    if(points[i].radius > 100){
-      points[i].radius= 0;
-    }
   }
 }
 
@@ -49,4 +59,11 @@ animate()
 function getRandom(max){
   let ans = Math.floor(Math.random()*max);
   return ans;
+}
+
+function addPoint(color){
+  let A = new Point(new Vector2d(getRandom(width),getRandom(height)),20 + getRandom(80),color,"hallos");
+  A.label = counter;
+  counter++;
+  points.push(A);
 }
