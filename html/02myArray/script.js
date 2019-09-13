@@ -8,7 +8,7 @@ canvas.width = width;
 canvas.height = height;
 
 let points = [];
-let maxpoints = 5;
+let maxpoints = 10;
 let counter = 0;
 let hit = 0;
 
@@ -62,7 +62,7 @@ function getRandom(max){
 }
 
 function addPoint(color){
-  let A = new Point(new Vector2d(getRandom(width),getRandom(height)),20 + getRandom(80),color,"hallos");
+  let A = new Point(new Vector2d(getRandom(width),getRandom(height)),50,color,"hallos");
   A.label = counter;
   counter++;
   points.push(A);
