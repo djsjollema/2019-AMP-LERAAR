@@ -7,17 +7,16 @@ const height = window.innerHeight;
 canvas.width = width;
 canvas.height = height;
 
-let A = new Point(new Vector2d(500,100),25,"red","A",true);
-let B = new Point(new Vector2d(650,150),25,"red","B",true);
+let A = new Point(new Vector2d(500,100),15,"red","A",true);
+let B = new Point(new Vector2d(650,150),15,"blue","B",true);
 
-let spring = new Spring(A,B,0.8,0.9,new Vector2d(0,1));
+let spring = new Spring(A,B,0.9,0.90,new Vector2d(0,1));
 
 function animate() {
   context.clearRect(0,0,width,height);
   requestAnimationFrame(animate);
-  spring.draw(context);
   spring.update();
-  //console.log(spring.length)
+  spring.draw(context);
 }
 
 animate();
