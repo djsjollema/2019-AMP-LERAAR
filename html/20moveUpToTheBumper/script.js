@@ -7,12 +7,13 @@ const height = window.innerHeight;
 canvas.width = width;
 canvas.height = height;
 
-let ball, bumper;
+let ball, bumper, distance;
 
-bumper = new Point(new Vector2d(width/2,height/2),200,"yellow","bumper");
+bumper = new Point(new Vector2d(width/2,height/2),200,"white","bumper");
 ball = new dPoint(new Vector2d(200,200),new Vector2d(5,6),new Vector2d(0,0),20,"red","ball");
 
 ball.rad = new Vector2d(1,1);
+ball.tan = new Vector2d(1,1);
 
 
 function animate(){
@@ -23,8 +24,19 @@ function animate(){
   ball.rad.dx = bumper.position.dx - ball.pos.dx;
   ball.rad.dy = bumper.position.dy - ball.pos.dy;
 
-  ball.rad.magnitude = 100;
+  distance = ball.rad.magnitude;
 
+  ball.rad.magnitude = 1;
+  ball.tan.dx = -ball.rad.dy;
+  ball.tan.dy = ball.rad.dx;
+  ball.rad.magnitude = ball.rad.dot(ball.vel);
+  ball.tan.magnitude = ball.tan.dot(ball.vel);
+
+  if(distance < ball.radius + bumper.radius){
+    // console.log('collision');
+    ball.rad.magnitude = -ball.rad.magnitude;
+    ball.vel.sumVector(ball.rad,ball.tan)
+  }
 
   //drawing
 
@@ -32,7 +44,8 @@ function animate(){
   ball.draw(context);
 
   ball.vel.draw(context,ball.pos,20,"red");
-  ball.rad.draw(context,ball.pos,1,"blue");
+  ball.rad.draw(context,ball.pos,20,"blue");
+  ball.tan.draw(context,ball.pos,20,"yellow");
 }
 
 animate();
