@@ -8,7 +8,7 @@ canvas.width = width;
 canvas.height = height;
 
 let bumperArray = fillBumperArray();
-let ball = new dPoint(new Vector2d(100,100),new Vector2d(3,4),new Vector2d(0,0),10,"black"," ");
+let ball = new dPoint(new Vector2d(1,1),new Vector2d(0.2,0),new Vector2d(0,0.2),20,"red"," ");
 ball.rad = new Vector2d(1,1);
 ball.tan = new Vector2d(1,1);
 
@@ -20,9 +20,8 @@ function animate(){
   ball.draw(context);
 
   bumperArray.map((bump) => {
-    let distVector = new Vector2d(1,1);
+    let distVector = new Vector2d(3,4);
     distVector.differenceVector(bump.position,ball.pos);
-    //distVector.draw(context,ball.pos,1,"white");
     bump.draw(context);
 
     if(distVector.magnitude < ball.radius + bump.radius){
@@ -32,18 +31,19 @@ function animate(){
 
       ball.tan.dx = -ball.rad.dy;
       ball.tan.dy = ball.rad.dx;
+      ball.rad.magnitude = 1;
+      ball.tan.magnitude = 1;
 
-      ball.rad.draw(context,ball.pos,1,"white");
-      ball.tan.draw(context,ball.pos,1,"white");
-      
+      ball.rad.magnitude = ball.rad.dot(ball.vel);
+      ball.tan.magnitude = ball.tan.dot(ball.vel);
+
+      ball.rad.magnitude = -ball.rad.magnitude;
+      ball.vel.sumVector(ball.rad,ball.tan)
+
     } else {
       bump.color = "yellow";
     }
-
-
   })
-
-
 }
 
 animate();
@@ -52,11 +52,11 @@ animate();
 
 function fillBumperArray(){
   let array = [];
-  let startColumnWidth = 50;
-  let columnWidth = 100;
+  let startColumnWidth = 100;
+  let columnWidth = 200;
 
-  let startRowHeight = 50;
-  let rowHeight = 100;
+  let startRowHeight = 100;
+  let rowHeight = 200;
 
   let numberOnRow = Math.floor(width/columnWidth);
   let numberOfBumpers = Math.floor(height/rowHeight) * numberOnRow;
