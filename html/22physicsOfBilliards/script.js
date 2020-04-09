@@ -9,8 +9,8 @@ canvas.height = height;
 
 let A,B,distance;
 
-A = new dPoint(new Vector2d(200,200),new Vector2d(5,6),new Vector2d(0,0),200,"rgba(255,0,0,0.3)","A");
-B = new dPoint(new Vector2d(800,400),new Vector2d(-5,4),new Vector2d(0,0),200,"rgba(0,0,255,0.3)","B");
+A = new dPoint(new Vector2d(200,200),new Vector2d(5,6),new Vector2d(0,0),50,"rgba(255,0,0,0.3)","A");
+B = new dPoint(new Vector2d(800,400),new Vector2d(-5,4),new Vector2d(0,0),50,"rgba(0,0,255,0.3)","B");
 
 A.rad = new Vector2d(1,1);
 A.tan = new Vector2d(1,1);
@@ -58,14 +58,14 @@ function animate(){
   A.draw(context);
   B.draw(context);
 
-  A.vel.draw(context,A.pos,50,"white");
-  B.vel.draw(context,B.pos,50,"white");
+  A.vel.draw(context,A.pos,30,"white");
+  B.vel.draw(context,B.pos,30,"white");
 
-  A.rad.draw(context,A.pos,50,"red");
-  B.rad.draw(context,B.pos,50,"blue");
+  A.rad.draw(context,A.pos,30,"red");
+  B.rad.draw(context,B.pos,30,"blue");
 
-  A.tan.draw(context,A.pos,50,"green");
-  B.tan.draw(context,B.pos,50,"yellow");
+  A.tan.draw(context,A.pos,30,"green");
+  B.tan.draw(context,B.pos,30,"yellow");
 
 }
 
