@@ -14,6 +14,7 @@ function animate(){
   context.clearRect(0,0,width,height);
 
   air.map(mol => {
+    mol.update();
     mol.draw(context);
   })
 }
@@ -24,13 +25,16 @@ function makeAirArray(){
   let array = [];
   let numberOfMols = 12;
   let numberOnRow = 3;
-  let columnWidth = 100;
-  let rowHeight = 100;
+  let columnWidth = 150;
+  let rowHeight = 150;
 
   for(let i=0; i<numberOfMols; i++){
-    let x = i % numberOnRow * columnWidth;
-    let y = Math.floor(i/numberOnRow) * rowHeight;
-    let mol = new dPoint(new Vector2d(x,y),new Vector2d(0,0),new Vector2d(0,0),10,"black"," "+i);
+    let rnd = getRandomNumber(1,5);
+    let color = "rgb(" + (4-rnd)*50 + "," + (4-rnd)*50 + ", " + (4-rnd)*50 + ")";
+    let x = columnWidth/2 + i % numberOnRow * columnWidth;
+    let y = rowHeight/2 + Math.floor(i/numberOnRow) * rowHeight;
+    let mol = new dPoint(new Vector2d(x,y),new Vector2d(getRandomNumber(-5, 5),getRandomNumber(-5, 5)),new Vector2d(0,0),10*rnd,color," "+i);
+    dPoint.mass = rnd;
     array.push(mol);
   }
 
