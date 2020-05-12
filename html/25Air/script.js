@@ -16,61 +16,76 @@ function animate(){
   air.map(mol => {
     mol.update();
     mol.draw(context);
+    //console.log(mol.nextPos);
     air.map(otherMol => {
-      let distance = new Vector2d();
-      distance.differenceVector(otherMol.pos,mol.pos);
-      distance.add(mol.vel);
-      distance.add(otherMol.vel);
-      // distance.draw(context,mol.pos,1,"white")
-      if(distance.magnitude < mol.radius + otherMol.radius){
-        if(mol.index != otherMol.index){
-          //collision between mol and other mol
-          //mol.rad.equals(distance);
-          //otherMol.rad.equals(distance);
-          mol.rad.dx = distance.dx;
-          mol.rad.dy = distance.dy;
+      if(mol.index != otherMol.index){
+        let distance = new Vector2d();
+        let nextDistance = new Vector2d();
+        nextDistance.differenceVector(otherMol.nextPos,mol.nextPos);
+        distance.differenceVector(otherMol.pos,mol.pos);
 
-          otherMol.rad.dx = distance.dx;
-          otherMol.rad.dy = distance.dy;
+          mol.rad.equals(distance)
+          otherMol.rad.equals(distance);
 
           mol.rad.magnitude =1 ;
           otherMol.rad.magnitude =1;
 
           mol.tan.dx = -mol.rad.dy;
           mol.tan.dy = mol.rad.dx;
+          mol.tan.magnitude = 1;
 
           otherMol.tan.dx = -otherMol.rad.dy;
           otherMol.tan.dy = otherMol.rad.dx;
+          otherMol.tan.magnitude = 1;
 
-          mol.rad.magnitude = mol.rad.dot(mol.vel);
-          otherMol.rad.magnitude = otherMol.rad.dot(otherMol.vel);
+          // mol.rad.draw(context,mol.pos,50,"white");
+          // mol.tan.draw(context,mol.pos,50,"blue");
 
-          let Msum = mol.mass + otherMol.mass;
-          let MAB = mol.mass - otherMol.mass;
-          let MBA = otherMol.mass - mol.mass;
+          if(nextDistance.magnitude < mol.radius + otherMol.radius ){
 
-          let P = new Vector2d()
-          let Q = new Vector2d()
-          let R = new Vector2d()
-          let S = new Vector2d()
+            mol.rad.magnitude = mol.rad.dot(mol.vel);
+            mol.tan.magnitude = mol.tan.dot(mol.vel);
+            otherMol.rad.magnitude = otherMol.rad.dot(otherMol.vel);
+            otherMol.tan.magnitude = otherMol.tan.dot(otherMol.vel);
 
-          P.equals(mol.rad);
-          Q.equals(otherMol.rad);
-          R.equals(mol.rad);
-          S.equals(otherMol.rad);
+            let Msum = mol.mass + otherMol.mass
+            let MAB =mol.mass - otherMol.mass
+            let MBA = otherMol.mass - mol.mass
 
-          P.scalMul(MAB/Msum );
-          Q.scalMul(2*otherMol.mass /Msum);
-          R.scalMul(2*mol.mass / Msum);
-          S.scalMul(MBA/Msum);
+            //  P = MAB/Msum * A.rad
+            // Q = 2*B.mass /Msum * B.rad
+            // R = 2*A.mass / Msum * A.rad
+            // S = MBA/Msum * B.rad
+
+            P = new Vector2d(1,1);
+            Q = new Vector2d(1,1);
+            R = new Vector2d(1,1);
+            S = new Vector2d(1,1);
+
+            P.equals(mol.rad);
+            Q.equals(otherMol.rad);
+            R.equals(mol.rad);
+            S.equals(otherMol.rad);
+
+            let ps =MAB/Msum
+            let qs = 2*otherMol.mass /Msum;
+            let rs = 2*mol.mass / Msum
+            let ss = MBA/Msum;
 
 
+            P.scalMul(ps);
+            Q.scalMul(qs);
+            R.scalMul(rs);
+            S.scalMul(ss);
 
-          mol.rad.sumVector(P,Q);
-          otherMol.rad.sumVector(R,S);
+            // A.rad = P + Q
+            // B.rad = R + S
 
-          mol.vel.sumVector(mol.rad,mol.tan);
-          otherMol.vel.sumVector(otherMol.rad,otherMol.tan);
+            mol.rad.sumVector(P,Q);
+            otherMol.rad.sumVector(R,S);
+
+            mol.vel.sumVector(mol.rad,mol.tan);
+            otherMol.vel.sumVector(otherMol.rad,otherMol.tan);
 
         }
       }
@@ -81,24 +96,38 @@ function animate(){
 animate();
 
 function makeAirArray(){
+//   let array = [];
+// let columnWidth = 100;
+// let rowHeight = 100;
+//
+// let numOnARow = Math.floor(width/columnWidth);
+// let numberOfAtoms = numOnARow * Math.floor(height/rowHeight);
+
   let array = [];
-  let numberOfMols = 64;
-  let numberOnRow = 8;
-  let columnWidth = 150;
-  let rowHeight = 150;
-  let vMax = -2;
-  let vMin = 2;
+
+  let maxRND = 20
+
+
+  let columnWidth = 60;
+  let numberOnRow = Math.floor(width/columnWidth);
+  let rowHeight = 60;
+
+  let numberOfMols = numberOnRow * Math.floor(height/rowHeight);
+
+  let vMax = -5;
+  let vMin = 5;
 
   for(let i=0; i<numberOfMols; i++){
-    let rnd = getRandomNumber(1,5);
-    let color = "rgb(" + (4-rnd)*50 + "," + (4-rnd)*50 + ", " + (4-rnd)*50 + ")";
+    let rnd = getRandomNumber(1,maxRND);
+    let color = "rgba(" + 255 + "," + 255 +  "," + 255 + "," + 0.5 + ")";
     let x = columnWidth/2 + i % numberOnRow * columnWidth;
     let y = rowHeight/2 + Math.floor(i/numberOnRow) * rowHeight;
-    let mol = new dPoint(new Vector2d(x,y),new Vector2d(getRandomNumber(vMax, vMin),getRandomNumber(vMax, vMin)),new Vector2d(0,0),10*rnd,color,"" + i);
-    mol.mass = rnd;
+    let mol = new dPoint(new Vector2d(x,y),new Vector2d(getRandomNumber(vMax, vMin),getRandomNumber(vMax, vMin)),new Vector2d(0,0),rnd,color,);
+    mol.mass = Math.sqrt(rnd);
     mol.index =i;
     mol.tan = new Vector2d(1,1);
     mol.rad = new Vector2d(1,1);
+    mol.collision = false;
     array.push(mol);
   }
 
