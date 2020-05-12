@@ -59,10 +59,10 @@ function animate(){
           R.equals(mol.rad);
           S.equals(otherMol.rad);
 
-          P.scalMul(MAB/Msum )
-          Q.scalMul(2*otherMol.mass /Msum)
-          R.scalMul(2*mol.mass / Msum)
-          S.scalMul(MBA/Msum)
+          P.scalMul(MAB/Msum );
+          Q.scalMul(2*otherMol.mass /Msum);
+          R.scalMul(2*mol.mass / Msum);
+          S.scalMul(MBA/Msum);
 
 
 
@@ -82,8 +82,8 @@ animate();
 
 function makeAirArray(){
   let array = [];
-  let numberOfMols = 12;
-  let numberOnRow = 3;
+  let numberOfMols = 64;
+  let numberOnRow = 8;
   let columnWidth = 150;
   let rowHeight = 150;
   let vMax = -2;
