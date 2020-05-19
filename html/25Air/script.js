@@ -10,7 +10,7 @@ canvas.height = height;
 let air = makeAirArray();
 
 function animate(){
-  requestAnimationFrame(animate)
+  //requestAnimationFrame(animate)
   context.clearRect(0,0,width,height);
 
   air.map(mol => {
@@ -93,7 +93,7 @@ function animate(){
   })
 }
 
-animate();
+setInterval(animate,10);
 
 function makeAirArray(){
 //   let array = [];
@@ -108,14 +108,14 @@ function makeAirArray(){
   let maxRND = 20
 
 
-  let columnWidth = 60;
+  let columnWidth = 100;
   let numberOnRow = Math.floor(width/columnWidth);
-  let rowHeight = 60;
+  let rowHeight = 100;
 
   let numberOfMols = numberOnRow * Math.floor(height/rowHeight);
 
-  let vMax = -5;
-  let vMin = 5;
+  let vMax = -2;
+  let vMin = 2;
 
   for(let i=0; i<numberOfMols; i++){
     let rnd = getRandomNumber(1,maxRND);
